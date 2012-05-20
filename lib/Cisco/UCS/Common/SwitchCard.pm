@@ -7,7 +7,7 @@ use Cisco::UCS::Common::EthernetPort;
 use Scalar::Util qw(weaken);
 use Carp qw(croak);
 
-our $VERSION 	= '0.1';
+our $VERSION 	= '0.2';
 
 our @ATTRIBUTES = qw(dn id model operability power presence revision serial state thermal vendor voltage);
 
@@ -230,4 +230,4 @@ See http://dev.perl.org/licenses/ for more information.
 
 =cut
 
-1; # End of Cisco::UCS::Common::SwitchCard
+1;
