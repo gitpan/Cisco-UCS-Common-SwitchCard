@@ -7,7 +7,7 @@ use Cisco::UCS::Common::EthernetPort;
 use Scalar::Util qw(weaken);
 use Carp qw(croak);
 
-our $VERSION 	= '0.2';
+our $VERSION 	= '0.21';
 
 our @ATTRIBUTES = qw(dn id model operability power presence revision serial state thermal vendor voltage);
 
@@ -38,7 +38,12 @@ sub eth_port {
 }
 
 sub get_eth_port {
-        my ($self, $id)= @_;
+	my ($self, $id)	= @_;
+	return ( $id ? $self->get_eth_ports($id) : undef )
+}
+
+sub get_eth_ports {
+        my ($self, $id)	= @_;
         return $self->{ucs}->_get_child_objects(id => $id, type => 'etherPIo', class => 'Cisco::UCS::Common::EthernetPort', attr => 'eth_port', self => $self,
                                         	uid => 'portId', class_filter => { classId => 'etherPIo', slotId => $self->{id}, switchId => $self->{id} } )
 }
@@ -107,11 +112,16 @@ present.  Should you require a fresh object, use the B<get_eth_port> method desc
 
 =head2 get_eth_port ( $id )
 
-Returns a Ciscoo::UCS::Common::EthernetPort object representing the requested Ethernet port (given by the
+Returns a Cisco::UCS::Common::EthernetPort object representing the requested Ethernet port (given by the
 value of $id) on the switchcard.
 
 Note that this is a non-caching method and the UCSM will always be queried when this method is invoked.
 Subsequently, this method may be more expensive than the caching method B<eth_port> described above.
+
+=head2 get_eth_ports
+
+Returns an array of Cisco::UCS::Common::EthernetPort objects representing all Etehrnet ports present on 
+the specified card.
 
 =head2 id
 
